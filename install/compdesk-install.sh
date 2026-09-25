@@ -99,6 +99,9 @@ ensure_app_user() {
 
 ensure_env_file() {
   mkdir -p "$ENV_DIR"
+  # Service user must own dir+file: the setup wizard atomically rewrites
+  # this same file on completion (COMPDESK_ENV_FILE, see unit).
+  chown "$APP_USER":"$APP_USER" "$ENV_DIR"
   local ct_ip
   ct_ip="$(hostname -I | awk '{print $1}')"
   local db_pw="" auth_secret="" settings_key=""
@@ -128,9 +131,9 @@ HOSTNAME="0.0.0.0"
 # The wizard uses a one-time 30-min token and disables itself after install.
 SETUP_ALLOW_REMOTE="true"
 EOF
-  chown root:"$APP_USER" "$ENV_FILE"
-  chmod 640 "$ENV_FILE"
-  msg "Wrote ${ENV_FILE} (0600-equivalent, group ${APP_USER} read)."
+  chown "$APP_USER":"$APP_USER" "$ENV_FILE"
+  chmod 600 "$ENV_FILE"
+  msg "Wrote ${ENV_FILE} (0600, owner ${APP_USER})."
 }
 
 ensure_database() {

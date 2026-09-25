@@ -11,7 +11,7 @@ User=compdesk
 Group=compdesk
 WorkingDirectory=/opt/compdesk
 EnvironmentFile=/var/lib/compdesk/.env
-Environment=HOSTNAME=0.0.0.0 PORT=3000 SETUP_ALLOW_REMOTE=true
+Environment=HOSTNAME=0.0.0.0 PORT=3000 SETUP_ALLOW_REMOTE=true COMPDESK_ENV_FILE=/var/lib/compdesk/.env
 ExecStart=/usr/bin/node scripts/launch.mjs
 Restart=always
 RestartSec=5
