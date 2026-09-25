@@ -123,6 +123,10 @@ APP_SETTINGS_ENCRYPTION_KEY="${settings_key}"
 NODE_ENV="production"
 PORT="${APP_PORT}"
 HOSTNAME="0.0.0.0"
+# Allow the first-run setup wizard to bind 0.0.0.0 (same as upstream Docker
+# setup). Home LAN only: never expose the setup listener to the Internet.
+# The wizard uses a one-time 30-min token and disables itself after install.
+SETUP_ALLOW_REMOTE="true"
 EOF
   chown root:"$APP_USER" "$ENV_FILE"
   chmod 640 "$ENV_FILE"
