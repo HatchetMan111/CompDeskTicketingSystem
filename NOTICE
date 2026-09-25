@@ -1,0 +1,33 @@
+CompDesk
+
+CompDesk was originally created by Taha Laachari as an xHydra open-source project.
+
+Official website:
+https://xhydra.fr
+
+Official repository:
+https://github.com/TahaHydra/CompDesk
+
+Creator:
+https://github.com/TahaHydra
+
+CompDesk source code is distributed under the MIT License.
+
+The xHydra name and visual identity identify the original project and creator.
+They must not be used to falsely imply that an unofficial fork, service, or modified distribution is endorsed by Taha Laachari or xHydra.
+
+---
+
+Fork notice (CompDeskTicketingSystem):
+
+This repository, CompDeskTicketingSystem, is an unofficial fork of CompDesk
+(https://github.com/TahaHydra/CompDesk), maintained by HatchetMan111
+(https://github.com/HatchetMan111).
+
+It is distributed under the MIT License, which permits redistribution and
+modification provided the original copyright and this notice are preserved.
+
+This fork is not affiliated with, sponsored by, or endorsed by Taha Laachari
+or xHydra. All credit for the original CompDesk code belongs to Taha Laachari
+/ xHydra. Modifications made in this fork are marked with a separate copyright
+line in LICENSE.
