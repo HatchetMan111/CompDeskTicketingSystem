@@ -14,6 +14,26 @@
 
 Upstream project: [github.com/TahaHydra/CompDesk](https://github.com/TahaHydra/CompDesk)
 
+## Proxmox LXC one-liner
+
+Install CompDesk into a fresh LXC container on your Proxmox VE host (run as root on the host):
+
+```bash
+bash -c "$(wget -qLO - https://raw.githubusercontent.com/HatchetMan111/CompDeskTicketingSystem/main/install/compdesk.sh)"
+```
+
+What it does: picks the next free CT ID, creates an unprivileged Debian 12 container named `compdesk` (2 vCPU / 2 GB RAM / 8 GB disk, `local-lvm`, `vmbr0` DHCP, `onboot: 1`), installs Node.js 24 + PostgreSQL 16 natively, builds the app, and registers a reboot-safe systemd service. The installer is idempotent — re-running it reuses the container and never rotates secrets. On failure it prints the full error chain (command, exit code, stack, service status, logs); re-run with `DEBUG=1 bash -x` for a trace.
+
+After installation the Web UI is at `http://[CONTAINER-IP]:3000` (first visit: `http://[CONTAINER-IP]:3000/setup` with the one-time token from `pct exec <CTID> -- journalctl -u compdesk -n 100 --no-pager | grep -i token`).
+
+Overrides (examples):
+
+```bash
+CTID=101 VCPUS=2 RAM=2048 DISK=8 bash -c "$(wget -qLO - https://raw.githubusercontent.com/HatchetMan111/CompDeskTicketingSystem/main/install/compdesk.sh)"
+```
+
+Update: re-run the one-liner (pulls latest code, runs migrations, restarts the service). Deinstall: `pct stop <CTID> && pct destroy <CTID>` (back up `/var/lib/compdesk` and `pg_dump compdesk_db` first if needed).
+
 > **Public beta.** CompDesk is under active development and is not yet claimed as mature, production-hardened software. See [Known limitations](#known-limitations) and the [public release checklist](docs/PUBLIC_RELEASE_CHECKLIST.md) before deploying it for real users.
 
 CompDesk is a self-hosted helpdesk for small organizations: department-scoped ticket routing, role-based access, attachments, search and filtering, and fully customizable organization branding — deployed with Docker in minutes, with no mandatory cloud account. Review the [production hardening guide](docs/PRODUCTION_HARDENING.md) before deployment.
