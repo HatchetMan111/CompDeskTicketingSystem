@@ -1,0 +1,22 @@
+[Unit]
+Description=CompDesk ticketing and help desk (unofficial fork)
+Documentation=https://github.com/HatchetMan111/CompDeskTicketingSystem
+After=network-online.target postgresql.service
+Wants=network-online.target
+Requires=postgresql.service
+
+[Service]
+Type=simple
+User=compdesk
+Group=compdesk
+WorkingDirectory=/opt/compdesk
+EnvironmentFile=/var/lib/compdesk/.env
+Environment=HOSTNAME=0.0.0.0 PORT=3000
+ExecStart=/usr/bin/node scripts/launch.mjs
+Restart=always
+RestartSec=5
+NoNewPrivileges=true
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
