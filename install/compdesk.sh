@@ -51,7 +51,7 @@ err() {
 }
 trap err ERR
 
-msg() { echo "==> $*"; }
+msg() { echo "==> $*" >&2; }
 
 require_root() {
   if [ "$(id -u)" -ne 0 ]; then
