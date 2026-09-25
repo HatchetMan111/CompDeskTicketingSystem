@@ -79,7 +79,9 @@ pick_ctid() {
 }
 
 existing_ct() {
-  pct list 2>/dev/null | awk -v h="$HOSTNAME_CT" '$3 == h {print $1; exit}'
+  # NB: 'pct list' prints 3 cols when unlocked (VMID Status Name) but 4 when
+  # locked (VMID Status Lock Name) -> always match the last field.
+  pct list 2>/dev/null | awk -v h="$HOSTNAME_CT" '$NF == h {print $1; exit}'
 }
 
 resolve_template() {
@@ -105,7 +107,7 @@ resolve_template() {
 create_ct() {
   local tpl="$1"
   local rootpw
-  rootpw="$(openssl rand -base64 18 | tr -d '/+=' | head -c 20)"
+  rootpw="$(openssl rand -base64 32 | tr -d '/+=' | head -c 20)"
   msg "Creating container ${CTID} (${HOSTNAME_CT}) from ${tpl}..."
   pct create "$CTID" "$tpl" \
     --hostname "$HOSTNAME_CT" \

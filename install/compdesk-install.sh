@@ -104,6 +104,10 @@ ensure_env_file() {
   chown "$APP_USER":"$APP_USER" "$ENV_DIR"
   local ct_ip
   ct_ip="$(hostname -I | awk '{print $1}')"
+  if [ -z "$ct_ip" ]; then
+    echo "ERROR: container has no IP (hostname -I empty), cannot write AUTH_URL." >&2
+    exit 7
+  fi
   local db_pw="" auth_secret="" settings_key=""
   if [ -f "$ENV_FILE" ]; then
     msg "Reusing existing ${ENV_FILE} (secrets are never rotated)."
@@ -176,7 +180,10 @@ install_service() {
   mkdir -p "${APP_DIR}/storage/attachments"
   chown -R "$APP_USER":"$APP_USER" "${APP_DIR}/storage"
   systemctl daemon-reload
-  systemctl enable --now compdesk
+  # enable --now would NOT restart an already-running service, so re-runs
+  # would never apply unit/code updates -> always restart to converge.
+  systemctl enable compdesk
+  systemctl restart compdesk
 }
 
 open_firewall_port() {
